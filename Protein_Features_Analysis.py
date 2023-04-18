@@ -511,7 +511,7 @@ plt.legend(["benign", "pathogenic"], loc=0)
 plt.xlim(0,1)
 
 
-# In[8]:
+# In[2]:
 
 
 #Computing the final rsa data at variant location
@@ -549,7 +549,7 @@ plt.legend(["benign", "pathogenic"], loc=0)
 plt.xlim(0,1)
 
 
-# In[20]:
+# In[4]:
 
 
 #Graph 3: J distribution graph in both directions
@@ -597,8 +597,8 @@ z = np.array(f_p['delta_rsa'])
 y_abs = np.array(abs(f_b['delta_rsa'])) 
 z_abs = np.array(abs(f_p['delta_rsa']))
 
-plt.plot(x,y_abs,'r')
-plt.plot(x,z_abs,'b')
+plt.plot(x,y_abs,'b')
+plt.plot(x,z_abs,'r')
 plt.title('Distribution of absolute delta_rsa values at every value of J')
 plt.xlabel('J values')
 plt.ylabel('Absolute delta_rsa values')
@@ -606,8 +606,8 @@ plt.xlim(-1100,1100)
 plt.legend(["benign", "pathogenic"], loc=0)
 plt.show()
 
-plt.plot(x,y_abs,'r')
-plt.plot(x,z_abs,'b')
+plt.plot(x,y_abs,'b')
+plt.plot(x,z_abs,'r')
 plt.title('Distribution of absolute delta_rsa values at every value of J')
 plt.xlabel('J values')
 plt.ylabel('Absolute delta_rsa values')
@@ -638,7 +638,7 @@ for row in pp.index:
         d_rsa_p.append(pp.loc[row, 'delta_rsa'])
 
 
-# In[14]:
+# In[5]:
 
 
 #Graph 4: Distribution of the average delta_rsa value at 20 residues near by the variant site
@@ -796,8 +796,8 @@ z_12 = len(bin12)/len(J_AVE_p)
 z = np.array([z_1,z_2,z_3,z_4,z_5,z_6,z_7,z_8,z_9,z_10,z_11,z_12])
 
 fig, ax = plt.subplots()
-ax.plot(x,y,'r') #benign
-ax.plot(x,z,'b') #pathogenic
+ax.plot(x,y,'b') #benign
+ax.plot(x,z,'r') #pathogenic
 plt.title("probability distribution of average delta_rsa values")
 plt.xlabel("X = average delta_rsa")
 plt.ylabel("P(X)")
@@ -807,7 +807,7 @@ fig.autofmt_xdate()
 plt.show()
 
 
-# In[4]:
+# In[6]:
 
 
 #Graph 5: Distribution of the relative average delta_rsa value at 20 residues near by the variant site
@@ -986,8 +986,8 @@ z_12 = len(bin12)/len(J_AVE_p)
 z = np.array([z_1,z_2,z_3,z_4,z_5,z_6,z_7,z_8,z_9,z_10,z_11,z_12])
 
 fig, ax = plt.subplots()
-ax.plot(x,y,'r') #benign
-ax.plot(x,z,'b') #pathogenic
+ax.plot(x,y,'b') #benign
+ax.plot(x,z,'r') #pathogenic
 plt.title("probability distribution of relative average delta_rsa values")
 plt.xlabel("X = relative average delta_rsa")
 plt.ylabel("P(X)")

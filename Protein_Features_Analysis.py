@@ -36,7 +36,7 @@ import pandas as pd
 from pandas import DataFrame
 import re
 
-data = pd.read_csv('filtered_humsavar.csv')
+data = pd.read_csv('filtered_humsavar.csv') #This is a csv file of all the entries in the humsavar database
 
 #removing the 'p.' in AAC column
 aac = data['AAC']
@@ -469,7 +469,7 @@ df2.to_csv('pathogenic_filtered_data.csv')
 print('csv file created')
 
 
-# In[56]:
+# In[6]:
 
 
 #Computing the initial rsa data at variant location
@@ -491,7 +491,7 @@ for row in pp.index:
         rsa_i_p.append(pp.loc[row, 'rsa_w'])
 
 
-# In[95]:
+# In[7]:
 
 
 #Graph 1: distribution of initial rsa at the variant location
@@ -504,17 +504,17 @@ sns.distplot(rsa_i_b, hist = True, kde = False, bins = 40,
 sns.distplot(rsa_i_p, hist = True, kde = False, bins = 40, 
                  kde_kws = {'linewidth': 2}, color = 'r')
 
-plt.title("Distribution of initial rsa values at variant location")
+plt.title("Distribution of initial rsa values at variant site")
 plt.xlabel("Initial rsa values")
 plt.ylabel("Frequency")
 plt.legend(["benign", "pathogenic"], loc=0)
 plt.xlim(0,1)
 
 
-# In[1]:
+# In[8]:
 
 
-#Computing the initial rsa data at variant location
+#Computing the final rsa data at variant location
 import pandas as pd
 from pandas import DataFrame
 
@@ -533,7 +533,7 @@ for row in pp.index:
         rsa_f_p.append(pp.loc[row, 'rsa_m'])
 
 
-# In[100]:
+# In[9]:
 
 
 #Graph 2: distribution of final rsa at the variant location
@@ -542,14 +542,14 @@ sns.distplot(rsa_f_b, hist = True, kde = False, bins = 40,
 sns.distplot(rsa_f_p, hist = True, kde = False, bins = 40, 
                  kde_kws = {'linewidth': 2}, color = 'r')
 
-plt.title("Distribution of final rsa values at variant location")
+plt.title("Distribution of final rsa values at variant site")
 plt.xlabel("Final rsa values")
 plt.ylabel("Frequency")
 plt.legend(["benign", "pathogenic"], loc=0)
 plt.xlim(0,1)
 
 
-# In[8]:
+# In[20]:
 
 
 #Graph 3: J distribution graph in both directions
@@ -603,6 +603,15 @@ plt.title('Distribution of absolute delta_rsa values at every value of J')
 plt.xlabel('J values')
 plt.ylabel('Absolute delta_rsa values')
 plt.xlim(-1100,1100)
+plt.legend(["benign", "pathogenic"], loc=0)
+plt.show()
+
+plt.plot(x,y_abs,'r')
+plt.plot(x,z_abs,'b')
+plt.title('Distribution of absolute delta_rsa values at every value of J')
+plt.xlabel('J values')
+plt.ylabel('Absolute delta_rsa values')
+plt.xlim(-75,75)
 plt.legend(["benign", "pathogenic"], loc=0)
 plt.show()
 
@@ -796,4 +805,312 @@ plt.legend(["benign", "pathogenic"], loc=0)
 
 fig.autofmt_xdate()
 plt.show()
+
+
+# In[4]:
+
+
+#Graph 5: Distribution of the relative average delta_rsa value at 20 residues near by the variant site
+import pandas as pd
+from pandas import DataFrame
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+from statistics import mean
+
+
+bb = pd.read_csv('benign_filtered_data.csv')
+pp = pd.read_csv('pathogenic_filtered_data.csv')
+
+x_1 = '(-10^-1,-10^-2]'
+x_2 = '(-10^-2,-10^-3]'
+x_3 = '(-10^-3,-10^-4]'
+x_4 = '(-10^-4,-10^-5]'
+x_5 = '(-10^-5,-10^-6]'
+x_6 = '(-10^-6,0]'
+x_7 = '(0,10^-6]'
+x_8 = '(10^-6,10^-5]'
+x_9 = '(10^-5,10^-4]'
+x_10 = '(10^-4,10^-3]'
+x_11 = '(10^-3,10^-2]'
+x_12 = '(10^-2,10^-1]'
+
+x = np.array([x_1,x_2,x_3,x_4,x_5,x_6,x_7,x_8,x_9,x_10,x_11,x_12])
+
+J_AVE_b = []
+for row in bb.index:
+    if bb.loc[row,'seq_w'] != bb.loc[row,'seq_m']:
+        J_AVE_b.append(((bb.loc[row, 'delta_rsa']+bb.loc[row+1, 'delta_rsa']+bb.loc[row+2, 'delta_rsa']
+                     +bb.loc[row+3, 'delta_rsa']+bb.loc[row+4, 'delta_rsa']+bb.loc[row+5, 'delta_rsa']
+                     +bb.loc[row+6, 'delta_rsa']+bb.loc[row+7, 'delta_rsa']+bb.loc[row+8, 'delta_rsa']
+                     +bb.loc[row+9, 'delta_rsa']+bb.loc[row-1, 'delta_rsa']+bb.loc[row-2, 'delta_rsa']
+                     +bb.loc[row-3, 'delta_rsa']+bb.loc[row-4, 'delta_rsa']+bb.loc[row-5, 'delta_rsa']
+                     +bb.loc[row-6, 'delta_rsa']+bb.loc[row-7, 'delta_rsa']+bb.loc[row-8, 'delta_rsa']
+                     +bb.loc[row-9, 'delta_rsa'])/19)/((bb.loc[row, 'rsa_w']+bb.loc[row+1, 'rsa_w']+bb.loc[row+2, 'rsa_w']
+                     +bb.loc[row+3, 'rsa_w']+bb.loc[row+4, 'rsa_w']+bb.loc[row+5, 'rsa_w']
+                     +bb.loc[row+6, 'rsa_w']+bb.loc[row+7, 'rsa_w']+bb.loc[row+8, 'rsa_w']
+                     +bb.loc[row+9, 'rsa_w']+bb.loc[row-1, 'rsa_w']+bb.loc[row-2, 'rsa_w']
+                     +bb.loc[row-3, 'rsa_w']+bb.loc[row-4, 'rsa_w']+bb.loc[row-5, 'rsa_w']
+                     +bb.loc[row-6, 'rsa_w']+bb.loc[row-7, 'rsa_w']+bb.loc[row-8, 'rsa_w']
+                     +bb.loc[row-9, 'rsa_w'])))
+
+bin1 = []
+bin2 = []
+bin3 = []
+bin4 = []
+bin5 = []
+bin6 = []
+bin7 = []
+bin8 = []
+bin9 = []
+bin10 = []
+bin11 = []
+bin12 = []
+for i in J_AVE_b:
+    if -10**-1 < i <= -10**-2:
+        bin1.append(i)
+    if -10**-2 < i <= -10**-3:
+        bin2.append(i)
+    if -10**-3 < i <= -10**-4:
+        bin3.append(i)
+    if -10**-4 < i <= -10**-5:
+        bin4.append(i)
+    if -10**-5 < i <= -10**-6:
+        bin5.append(i)
+    if -10**-6 < i <= 0:
+        bin6.append(i)
+    if 0 < i <= 10**-6:
+        bin7.append(i)
+    if 10**-6 < i <= 10**-5:
+        bin8.append(i)
+    if 10**-5 < i <= 10**-4:
+        bin9.append(i)
+    if 10**-4 < i <= 10**-3:
+        bin10.append(i)
+    if 10**-3 < i <= 10**-2:
+        bin11.append(i)
+    if 10**-2 < i <= 10**-1:
+        bin12.append(i)
+        
+# print(len(bin1)+len(bin2)+len(bin3)+len(bin4)+len(bin5)+len(bin6)+len(bin7)+len(bin8)+len(bin9)+len(bin10)
+#       +len(bin11)+len(bin12)==len(J_AVE_b))
+
+y_1 = len(bin1)/len(J_AVE_b)
+y_2 = len(bin2)/len(J_AVE_b)
+y_3 = len(bin3)/len(J_AVE_b)
+y_4 = len(bin4)/len(J_AVE_b)
+y_5 = len(bin5)/len(J_AVE_b)
+y_6 = len(bin6)/len(J_AVE_b)
+y_7 = len(bin7)/len(J_AVE_b)
+y_8 = len(bin8)/len(J_AVE_b)
+y_9 = len(bin9)/len(J_AVE_b)
+y_10 = len(bin10)/len(J_AVE_b)
+y_11 = len(bin11)/len(J_AVE_b)
+y_12 = len(bin12)/len(J_AVE_b)
+
+y = np.array([y_1,y_2,y_3,y_4,y_5,y_6,y_7,y_8,y_9,y_10,y_11,y_12])
+
+
+J_AVE_p = []
+for row in pp.index:
+    if pp.loc[row,'seq_w'] != pp.loc[row,'seq_m']:
+        J_AVE_p.append(((pp.loc[row, 'delta_rsa']+pp.loc[row+1, 'delta_rsa']+pp.loc[row+2, 'delta_rsa']
+                     +pp.loc[row+3, 'delta_rsa']+pp.loc[row+4, 'delta_rsa']+pp.loc[row+5, 'delta_rsa']
+                     +pp.loc[row+6, 'delta_rsa']+pp.loc[row+7, 'delta_rsa']+pp.loc[row+8, 'delta_rsa']
+                     +pp.loc[row+9, 'delta_rsa']+pp.loc[row-1, 'delta_rsa']+pp.loc[row-2, 'delta_rsa']
+                     +pp.loc[row-3, 'delta_rsa']+pp.loc[row-4, 'delta_rsa']+pp.loc[row-5, 'delta_rsa']
+                     +pp.loc[row-6, 'delta_rsa']+pp.loc[row-7, 'delta_rsa']+pp.loc[row-8, 'delta_rsa']
+                     +pp.loc[row-9, 'delta_rsa'])/19)/((pp.loc[row, 'rsa_w']+pp.loc[row+1, 'rsa_w']+pp.loc[row+2, 'rsa_w']
+                     +pp.loc[row+3, 'rsa_w']+pp.loc[row+4, 'rsa_w']+pp.loc[row+5, 'rsa_w']
+                     +pp.loc[row+6, 'rsa_w']+pp.loc[row+7, 'rsa_w']+pp.loc[row+8, 'rsa_w']
+                     +pp.loc[row+9, 'rsa_w']+pp.loc[row-1, 'rsa_w']+pp.loc[row-2, 'rsa_w']
+                     +pp.loc[row-3, 'rsa_w']+pp.loc[row-4, 'rsa_w']+pp.loc[row-5, 'rsa_w']
+                     +pp.loc[row-6, 'rsa_w']+pp.loc[row-7, 'rsa_w']+pp.loc[row-8, 'rsa_w']
+                     +pp.loc[row-9, 'rsa_w'])/19))
+
+
+bin1 = []
+bin2 = []
+bin3 = []
+bin4 = []
+bin5 = []
+bin6 = []
+bin7 = []
+bin8 = []
+bin9 = []
+bin10 = []
+bin11 = []
+bin12 = []
+for i in J_AVE_p:
+    if -10**-1 < i <= -10**-2:
+        bin1.append(i)
+    if -10**-2 < i <= -10**-3:
+        bin2.append(i)
+    if -10**-3 < i <= -10**-4:
+        bin3.append(i)
+    if -10**-4 < i <= -10**-5:
+        bin4.append(i)
+    if -10**-5 < i <= -10**-6:
+        bin5.append(i)
+    if -10**-6 < i <= 0:
+        bin6.append(i)
+    if 0 < i <= 10**-6:
+        bin7.append(i)
+    if 10**-6 < i <= 10**-5:
+        bin8.append(i)
+    if 10**-5 < i <= 10**-4:
+        bin9.append(i)
+    if 10**-4 < i <= 10**-3:
+        bin10.append(i)
+    if 10**-3 < i <= 10**-2:
+        bin11.append(i)
+    if 10**-2 < i <= 10**-1:
+        bin12.append(i)
+        
+# print(len(bin1)+len(bin2)+len(bin3)+len(bin4)+len(bin5)+len(bin6)+len(bin7)+len(bin8)+len(bin9)+len(bin10)
+#       +len(bin11)+len(bin12)==len(J_AVE_p))
+
+z_1 = len(bin1)/len(J_AVE_p)
+z_2 = len(bin2)/len(J_AVE_p)
+z_3 = len(bin3)/len(J_AVE_p)
+z_4 = len(bin4)/len(J_AVE_p)
+z_5 = len(bin5)/len(J_AVE_p)
+z_6 = len(bin6)/len(J_AVE_p)
+z_7 = len(bin7)/len(J_AVE_p)
+z_8 = len(bin8)/len(J_AVE_p)
+z_9 = len(bin9)/len(J_AVE_p)
+z_10 = len(bin10)/len(J_AVE_p)
+z_11 = len(bin11)/len(J_AVE_p)
+z_12 = len(bin12)/len(J_AVE_p)
+
+z = np.array([z_1,z_2,z_3,z_4,z_5,z_6,z_7,z_8,z_9,z_10,z_11,z_12])
+
+fig, ax = plt.subplots()
+ax.plot(x,y,'r') #benign
+ax.plot(x,z,'b') #pathogenic
+plt.title("probability distribution of relative average delta_rsa values")
+plt.xlabel("X = relative average delta_rsa")
+plt.ylabel("P(X)")
+plt.legend(["benign", "pathogenic"], loc=0)
+
+fig.autofmt_xdate()
+plt.show()
+
+
+# In[25]:
+
+
+#computing average delta rsa values for graph 6
+J_AVE_b = []
+for row in bb.index:
+    if bb.loc[row,'seq_w'] != bb.loc[row,'seq_m']:
+        J_AVE_b.append((bb.loc[row, 'delta_rsa']+bb.loc[row+1, 'delta_rsa']+bb.loc[row+2, 'delta_rsa']
+                     +bb.loc[row+3, 'delta_rsa']+bb.loc[row+4, 'delta_rsa']+bb.loc[row+5, 'delta_rsa']
+                     +bb.loc[row+6, 'delta_rsa']+bb.loc[row+7, 'delta_rsa']+bb.loc[row+8, 'delta_rsa']
+                     +bb.loc[row+9, 'delta_rsa']+bb.loc[row-1, 'delta_rsa']+bb.loc[row-2, 'delta_rsa']
+                     +bb.loc[row-3, 'delta_rsa']+bb.loc[row-4, 'delta_rsa']+bb.loc[row-5, 'delta_rsa']
+                     +bb.loc[row-6, 'delta_rsa']+bb.loc[row-7, 'delta_rsa']+bb.loc[row-8, 'delta_rsa']
+                     +bb.loc[row-9, 'delta_rsa'])/19)
+        
+J_AVE_p = []
+for row in pp.index:
+    if pp.loc[row,'seq_w'] != pp.loc[row,'seq_m']:
+        J_AVE_p.append((pp.loc[row, 'delta_rsa']+pp.loc[row+1, 'delta_rsa']+pp.loc[row+2, 'delta_rsa']
+                     +pp.loc[row+3, 'delta_rsa']+pp.loc[row+4, 'delta_rsa']+pp.loc[row+5, 'delta_rsa']
+                     +pp.loc[row+6, 'delta_rsa']+pp.loc[row+7, 'delta_rsa']+pp.loc[row+8, 'delta_rsa']
+                     +pp.loc[row+9, 'delta_rsa']+pp.loc[row-1, 'delta_rsa']+pp.loc[row-2, 'delta_rsa']
+                     +pp.loc[row-3, 'delta_rsa']+pp.loc[row-4, 'delta_rsa']+pp.loc[row-5, 'delta_rsa']
+                     +pp.loc[row-6, 'delta_rsa']+pp.loc[row-7, 'delta_rsa']+pp.loc[row-8, 'delta_rsa']
+                     +pp.loc[row-9, 'delta_rsa'])/19)
+
+
+# In[26]:
+
+
+#Graph 6: Distribution of the average delta_rsa value at 20 residues near by the variant site - normal x bins
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+
+sns.distplot(J_AVE_b, hist = True, kde = True, bins = 80, 
+                 kde_kws = {'linewidth': 2}, color = 'b')
+sns.distplot(J_AVE_p, hist = True, kde = True, bins = 80, 
+                 kde_kws = {'linewidth': 2}, color = 'r')
+
+plt.title("probability distribution of average delta_rsa values")
+plt.xlabel("X = average delta_rsa")
+plt.ylabel("P(x)")
+plt.legend(["benign", "pathogenic"], loc=0)
+plt.xlim(-0.05,0.05)
+
+
+# In[21]:
+
+
+#Graph 7: relative delta RSA for evenly distributed x bins
+import pandas as pd
+from pandas import DataFrame
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+from statistics import mean
+
+
+bb = pd.read_csv('benign_filtered_data.csv')
+pp = pd.read_csv('pathogenic_filtered_data.csv')
+
+J_AVE_b = []
+for row in bb.index:
+    if bb.loc[row,'seq_w'] != bb.loc[row,'seq_m']:
+        J_AVE_b.append(((bb.loc[row, 'delta_rsa']+bb.loc[row+1, 'delta_rsa']+bb.loc[row+2, 'delta_rsa']
+                     +bb.loc[row+3, 'delta_rsa']+bb.loc[row+4, 'delta_rsa']+bb.loc[row+5, 'delta_rsa']
+                     +bb.loc[row+6, 'delta_rsa']+bb.loc[row+7, 'delta_rsa']+bb.loc[row+8, 'delta_rsa']
+                     +bb.loc[row+9, 'delta_rsa']+bb.loc[row-1, 'delta_rsa']+bb.loc[row-2, 'delta_rsa']
+                     +bb.loc[row-3, 'delta_rsa']+bb.loc[row-4, 'delta_rsa']+bb.loc[row-5, 'delta_rsa']
+                     +bb.loc[row-6, 'delta_rsa']+bb.loc[row-7, 'delta_rsa']+bb.loc[row-8, 'delta_rsa']
+                     +bb.loc[row-9, 'delta_rsa'])/19)/((bb.loc[row, 'rsa_w']+bb.loc[row+1, 'rsa_w']+bb.loc[row+2, 'rsa_w']
+                     +bb.loc[row+3, 'rsa_w']+bb.loc[row+4, 'rsa_w']+bb.loc[row+5, 'rsa_w']
+                     +bb.loc[row+6, 'rsa_w']+bb.loc[row+7, 'rsa_w']+bb.loc[row+8, 'rsa_w']
+                     +bb.loc[row+9, 'rsa_w']+bb.loc[row-1, 'rsa_w']+bb.loc[row-2, 'rsa_w']
+                     +bb.loc[row-3, 'rsa_w']+bb.loc[row-4, 'rsa_w']+bb.loc[row-5, 'rsa_w']
+                     +bb.loc[row-6, 'rsa_w']+bb.loc[row-7, 'rsa_w']+bb.loc[row-8, 'rsa_w']
+                     +bb.loc[row-9, 'rsa_w'])))
+
+J_AVE_p = []
+for row in pp.index:
+    if pp.loc[row,'seq_w'] != pp.loc[row,'seq_m']:
+        J_AVE_p.append(((pp.loc[row, 'delta_rsa']+pp.loc[row+1, 'delta_rsa']+pp.loc[row+2, 'delta_rsa']
+                     +pp.loc[row+3, 'delta_rsa']+pp.loc[row+4, 'delta_rsa']+pp.loc[row+5, 'delta_rsa']
+                     +pp.loc[row+6, 'delta_rsa']+pp.loc[row+7, 'delta_rsa']+pp.loc[row+8, 'delta_rsa']
+                     +pp.loc[row+9, 'delta_rsa']+pp.loc[row-1, 'delta_rsa']+pp.loc[row-2, 'delta_rsa']
+                     +pp.loc[row-3, 'delta_rsa']+pp.loc[row-4, 'delta_rsa']+pp.loc[row-5, 'delta_rsa']
+                     +pp.loc[row-6, 'delta_rsa']+pp.loc[row-7, 'delta_rsa']+pp.loc[row-8, 'delta_rsa']
+                     +pp.loc[row-9, 'delta_rsa'])/19)/((pp.loc[row, 'rsa_w']+pp.loc[row+1, 'rsa_w']+pp.loc[row+2, 'rsa_w']
+                     +pp.loc[row+3, 'rsa_w']+pp.loc[row+4, 'rsa_w']+pp.loc[row+5, 'rsa_w']
+                     +pp.loc[row+6, 'rsa_w']+pp.loc[row+7, 'rsa_w']+pp.loc[row+8, 'rsa_w']
+                     +pp.loc[row+9, 'rsa_w']+pp.loc[row-1, 'rsa_w']+pp.loc[row-2, 'rsa_w']
+                     +pp.loc[row-3, 'rsa_w']+pp.loc[row-4, 'rsa_w']+pp.loc[row-5, 'rsa_w']
+                     +pp.loc[row-6, 'rsa_w']+pp.loc[row-7, 'rsa_w']+pp.loc[row-8, 'rsa_w']
+                     +pp.loc[row-9, 'rsa_w'])/19))  
+
+
+# In[24]:
+
+
+sns.distplot(J_AVE_b, hist = True, kde = True, bins = 120, 
+                 kde_kws = {'linewidth': 2}, color = 'b')
+sns.distplot(J_AVE_p, hist = True, kde = True, bins = 120, 
+                 kde_kws = {'linewidth': 2}, color = 'r')
+
+plt.title("Distribution of relative delta rsa values near by variant site")
+plt.xlabel("relative rsa values")
+plt.ylabel("Frequency")
+plt.legend(["benign", "pathogenic"], loc=0)
+plt.xlim(-0.2,0.2)
+
+
+# In[ ]:
+
+
+
 
